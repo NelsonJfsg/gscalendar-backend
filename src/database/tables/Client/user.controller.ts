@@ -6,6 +6,7 @@ import { UsersService } from 'src/database/tables/Client/user.service';
 export class UserController {
 
     constructor(private userService : UsersService){
+        
     }
 
     @Get()

@@ -6,16 +6,30 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
+
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
 
+  //Select an user
   public async findAll (): Promise<User[]> {
-    await this.usersRepository.find().then(val => console.log(val));
-    return await this.usersRepository.find();
-    
+
+    var result = await this.usersRepository.find().then(value => result = value);
+    console.log(result)
+    return result;
+
+    //await this.usersRepository.find().then(val => console.log(val));
+    await this.usersRepository.find().then(val => val);
   }
+
+  //Add a new user
+  async addUser (user : UserModel) {
+    this.usersRepository.insert(user);
+  }
+
+
+
 
   findOne(id: number): Promise<User | null> {
     return this.usersRepository.findOneBy({ id });
@@ -25,9 +39,6 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
-  async addUser (user : UserModel) {
-    this.usersRepository.insert(user);
-  }
 
   async deleteUser (id : number) {
 
