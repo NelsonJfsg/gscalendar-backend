@@ -9,6 +9,7 @@ export class UserController {
         
     }
 
+    //CRUD
     @Get()
     getAllUsers() : Promise<User[]>{
         return this.userService.findAll();
@@ -18,7 +19,14 @@ export class UserController {
     insertUser(@Body() user) : void {
         this.userService.addUser(user);
     }
+    //
 
+    //Auth
+    @Get("/auth/verify")
+    getUserById (@Body() user : UserModel) : Promise<boolean> {
+
+        return this.userService.verifyUserCredentials(user);
+    }
 
 
 }

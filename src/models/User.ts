@@ -1,8 +1,9 @@
 interface UserModel {
 
     id : number,
-    name : string,
-    lastName : string,
+    firstName : string,
+    fatherSurname : string,
+    motherSurname : string,
     email : string,
     password : string,
 

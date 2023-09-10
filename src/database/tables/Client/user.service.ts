@@ -28,6 +28,33 @@ export class UsersService {
     this.usersRepository.insert(user);
   }
 
+  //Verify user credentials.
+  verifyUserCredentials = async (user : UserModel) : Promise<boolean>  => {
+    
+    //Atributes
+    let thisUser : Promise<UserModel>;
+    let status : boolean;
+
+    //Get user by id
+    thisUser = this.usersRepository.findOneBy({id : user.id});
+    
+    //Validate credentials
+    await thisUser.then(item => {
+      if(item){
+        if(user.email == item.email && user.password == item.password){
+          status = true;
+        }else{
+          status = false;
+        }
+      }else{
+        status = false;
+      }
+    });
+
+    return status;
+
+  }
+
 
 
 
