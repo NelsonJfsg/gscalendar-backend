@@ -12,41 +12,70 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  //Select an user
+  //CRUD
+
+  //CREATE
+  
+  //Add a new user
+  async addUser (user : UserModel) : Promise<boolean>{
+    let value = this.usersRepository.insert(user);
+    let status : boolean;
+
+    await value.then(result => {
+      console.log(result)
+      console.log(result.identifiers.at(0))
+      if(result.identifiers.at(0) != null){
+        console.log("we are here")
+        status = true;
+        console.log(status)
+      }else{
+        status = false;
+      }
+    });
+    return status;
+  }
+
+  //READ
+
   public async findAll (): Promise<User[]> {
 
     var result = await this.usersRepository.find().then(value => result = value);
     console.log(result)
     return result;
 
-    //await this.usersRepository.find().then(val => console.log(val));
-    await this.usersRepository.find().then(val => val);
   }
 
-  //Add a new user
-  async addUser (user : UserModel) {
-    this.usersRepository.insert(user);
+  //Get user by id
+  private getUserById = (user : UserModel) : Promise<UserModel>=> {
+    
+    return this.usersRepository.findOneBy({id : user.id});
+    
   }
+
+  //UPDATE
+  //DELETE
 
   //Verify user credentials.
   verifyUserCredentials = async (user : UserModel) : Promise<boolean>  => {
     
     //Atributes
-    let thisUser : Promise<UserModel>;
     let status : boolean;
 
     //Get user by id
-    thisUser = this.usersRepository.findOneBy({id : user.id});
-    
+    let dbUser = this.getUserById(user);
+
     //Validate credentials
-    await thisUser.then(item => {
+    await dbUser.then(item => {
       if(item){
         if(user.email == item.email && user.password == item.password){
+          console.log("Credenciales correctas.");
           status = true;
         }else{
+          console.log("Credenciales incorrectas.");
           status = false;
         }
       }else{
+        console.log("Usuario no encontrado");
         status = false;
       }
     });
@@ -54,8 +83,6 @@ export class UsersService {
     return status;
 
   }
-
-
 
 
   findOne(id: number): Promise<User | null> {

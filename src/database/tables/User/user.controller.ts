@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { User } from 'src/Entities/user.entity';
-import { UsersService } from 'src/database/tables/Client/user.service';
+import { UsersService } from './user.service';
 
 @Controller("user")
 export class UserController {
@@ -10,20 +10,26 @@ export class UserController {
     }
 
     //CRUD
-    @Get()
+    @Get("/getAllUser")
     getAllUsers() : Promise<User[]>{
         return this.userService.findAll();
     }
 
     @Post("/addUser")
-    insertUser(@Body() user) : void {
-        this.userService.addUser(user);
+    insertUser(@Body() user) : Promise<boolean> {
+
+        let value; 
+
+        value = this.userService.addUser(user);
+        console.log(value)
+        return value;
+
     }
     //
 
     //Auth
     @Get("/auth/verify")
-    getUserById (@Body() user : UserModel) : Promise<boolean> {
+    verifyCredentials (@Body() user : UserModel) : Promise<boolean> {
 
         return this.userService.verifyUserCredentials(user);
     }

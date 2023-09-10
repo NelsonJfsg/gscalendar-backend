@@ -1,9 +1,9 @@
-import { UserModule } from './database/tables/Client/user.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './Entities/user.entity';
+import { UserModule } from './database/tables/User/user.module';
 
 @Module({
   imports: [
