@@ -16,15 +16,21 @@ export class UserController {
     }
 
     @Post("/addUser")
-    insertUser(@Body() user) : Promise<boolean> {
+    insertUser (@Body() user) {
 
-        let value; 
-
-        value = this.userService.addUser(user);
-        console.log(value)
-        return value;
+        return this.userService.addUser(user);
 
     }
+
+    //
+    @Get("/exists")
+    findByEmail (@Body() user : UserModel) : Promise<boolean> {
+        return this.userService.emailExists(user);
+    }
+
+
+
+
     //
 
     //Auth

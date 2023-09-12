@@ -1,6 +1,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { async } from 'rxjs';
 import { User } from 'src/Entities/user.entity';
 import { Repository } from 'typeorm';
 
@@ -18,21 +19,27 @@ export class UsersService {
   
   //Add a new user
   async addUser (user : UserModel) : Promise<boolean>{
-    let value = this.usersRepository.insert(user);
-    let status : boolean;
+    
 
-    await value.then(result => {
-      console.log(result)
-      console.log(result.identifiers.at(0))
-      if(result.identifiers.at(0) != null){
-        console.log("we are here")
-        status = true;
-        console.log(status)
-      }else{
-        status = false;
-      }
-    });
-    return status;
+    if(await this.emailExists(user)){
+      console.log("Ya existe el email")
+      
+    }else{
+
+      let value = this.usersRepository.insert(user);
+      let status : boolean;
+  
+      await value.then(result => {
+        if(result.identifiers.at(0) != null){
+          status = true;
+        }else{
+          status = false;
+        }
+      });
+      return status;
+    }
+
+   
   }
 
   //READ
@@ -84,9 +91,22 @@ export class UsersService {
 
   }
 
-
   findOne(id: number): Promise<User | null> {
     return this.usersRepository.findOneBy({ id });
+  }
+
+  //find by email
+  emailExists  = async (user : UserModel) : Promise<boolean> => {
+
+    let value = await this.usersRepository.findOneBy({email : user.email});
+
+    if(value){
+      return true;
+
+    }else{
+      return false;
+    }
+
   }
 
   async remove(id: number): Promise<void> {
