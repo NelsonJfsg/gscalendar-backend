@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { User } from 'src/Entities/user.entity';
 import { UsersService } from './user.service';
 
@@ -28,15 +28,12 @@ export class UserController {
         return this.userService.emailExists(user);
     }
 
-
-
-
     //
 
     //Auth
-    @Get("/auth/verify")
+    @Post("/auth/verify")
     verifyCredentials (@Body() user : UserModel) : Promise<boolean> {
-
+        console.log("Asd")
         return this.userService.verifyUserCredentials(user);
     }
 

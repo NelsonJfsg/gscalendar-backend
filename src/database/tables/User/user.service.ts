@@ -65,12 +65,16 @@ export class UsersService {
   //Verify user credentials.
   verifyUserCredentials = async (user : UserModel) : Promise<boolean>  => {
     
+
+    console.log(user)
+
     //Atributes
     let status : boolean;
 
     //Get user by id
-    let dbUser = this.getUserById(user);
+    let dbUser = this.usersRepository.findOneBy({email : user.email});
 
+    console.log(user.email + " " + user.password)
     //Validate credentials
     await dbUser.then(item => {
       if(item){
